@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <style>
+        #item {
+            border: 1px solid #ececec; 
+            width: 200px;
+            display: inline-block;
+            margin: 5px;
+            border-radius: 4px;
+        }
+        #item p {
+            font-family: arial;
+            margin: 0;
+            padding: 5px 10px;
+            background-color: #ececec;
+        }
+        #item #image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+        }
+        </style>
+    </head>
+    <body>
+        <h1> Hello World </h1>
+        <button id="data"> request data </button>
+        <script>
+            var a = JSON.parse({{ server_data | tojson }});
+            console.log(a.first_name);
+            document.querySelector("#data").addEventListener('click', function() {
+                fetch('/data').then((response) => {
+                    return response.json()
+                })
+                .then((value) => {
+                    console.log(value)
+                    value.forEach(function(item) {
+                        var parentDiv = document.createElement('div')
+                        parentDiv.id = 'item'
+                        // create a paragraph tag and put the item name in it
+                        var name = document.createElement('p')
+                        name.innerHTML=item.item
+                        var image = document.createElement('div')
+                        image.id = 'image'
+                        image.style.backgroundImage = `url(${item.image})`;
+                        var price = document.createElement('p')
+                        price.innerHTML=item.price
+                        // append those paragraph tags onto the body tag
+                        parentDiv.append(image)
+                        parentDiv.append(name)
+                        parentDiv.append(price)
+                        document.body.append(parentDiv)
+
+                    })
+                })
+            })
+            
+        </script>
+        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. <p/>
+    </body>
+</html>
